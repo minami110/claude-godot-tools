@@ -18,7 +18,8 @@
             "strict": false,
             "skills": [
                 "./skills/gdscript-file-manager",
-                "./skills/gdscript-test-gdUnit4",
+                "./skills/gdunit4-test-runner",
+                "./skills/gdunit4-test-writer",
                 "./skills/gdscript-validate"
             ]
         }
