@@ -17,9 +17,7 @@ After creating or editing GDScript files (`.gd`):
 
 ### Step 1: Refresh Godot Cache
 
-```bash
-<this skill dir>/scripts/refresh_godot_lsp.sh
-```
+Run the cache refresh script included in this skill (`scripts/refresh_godot_lsp.sh`).
 
 - Updates Godot's language server cache to recognize GDScript changes.
 - **Important**: When processing multiple files, run this once after editing all files (not per file).

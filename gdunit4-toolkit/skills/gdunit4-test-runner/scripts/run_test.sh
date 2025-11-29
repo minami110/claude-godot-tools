@@ -5,15 +5,24 @@
 
 set -e
 
-# スクリプトのディレクトリを取得してプロジェクトルートに移動
-# これにより、どのディレクトリから実行されても正しく動作する
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR/../../../../"
+# Use current working directory as project root
+# This allows the script to work when called from user's project directory
+PROJECT_ROOT="$(pwd)"
 
-# Godot 実行ファイルのパス（環境変数で上書き可能）
+# Godot executable path (can be overridden by environment variable)
 GODOT_CMD="${GODOT_PATH:-godot}"
 
-# ヘルプメッセージを表示する関数
+# Check if gdUnit4 plugin exists
+GDUNIT4_PATH="$PROJECT_ROOT/addons/gdUnit4"
+if [ ! -d "$GDUNIT4_PATH" ]; then
+  echo "Error: gdUnit4 not found at $GDUNIT4_PATH"
+  echo ""
+  echo "Please ensure gdUnit4 is installed in your project's addons directory."
+  echo "See: https://github.com/MikeSchulze/gdUnit4"
+  exit 2
+fi
+
+# Function to display help message
 show_help() {
   cat << 'EOF'
 Usage: ./run_test.sh [OPTIONS] [TARGET...]
@@ -47,7 +56,7 @@ EXIT CODES:
 EOF
 }
 
-# 引数解析
+# Parse arguments
 VERBOSE=false
 TARGETS=()
 
@@ -68,49 +77,49 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# ターゲットが指定されていない場合のデフォルト
+# Default target if none specified
 if [ ${#TARGETS[@]} -eq 0 ]; then
   TARGETS=("tests/")
 fi
 
-# テスト実行
+# Run tests
 echo "Running tests..."
 echo ""
 
-# 複数のターゲットを -a オプションとして追加
+# Add multiple targets as -a options
 TARGET_ARGS=()
 for target in "${TARGETS[@]}"; do
   TARGET_ARGS+=("-a" "$target")
 done
 
-# Godot を実行してテストを実行
+# Execute Godot to run tests
 set +e
 if [ "$VERBOSE" = true ]; then
-  # Verbose モード: すべてのログを表示
-  $GODOT_CMD --headless -s -d addons/gdUnit4/bin/GdUnitCmdTool.gd \
+  # Verbose mode: show all logs
+  $GODOT_CMD --headless -s -d "$GDUNIT4_PATH/bin/GdUnitCmdTool.gd" \
     "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c
   GODOT_EXIT_CODE=$?
 else
-  # 通常モード: Godot のログを抑制
-  $GODOT_CMD --headless -s -d addons/gdUnit4/bin/GdUnitCmdTool.gd \
+  # Normal mode: suppress Godot logs
+  $GODOT_CMD --headless -s -d "$GDUNIT4_PATH/bin/GdUnitCmdTool.gd" \
     "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c > /dev/null 2>&1
   GODOT_EXIT_CODE=$?
 fi
 set -e
 
-# 最新のレポートファイルを取得
-LATEST_REPORT=$(ls -t reports/*/results.xml 2>/dev/null | head -1)
+# Get the latest report file
+LATEST_REPORT=$(ls -t "$PROJECT_ROOT/reports/"*/results.xml 2>/dev/null | head -1)
 
 if [ -z "$LATEST_REPORT" ]; then
   echo "Error: Test report not found"
   exit 2
 fi
 
-# XML から情報を抽出
+# Extract information from XML
 TOTAL_TESTS=$(grep -oP '<testsuites[^>]*tests="\K[0-9]+' "$LATEST_REPORT" || echo "0")
 TOTAL_FAILURES=$(grep -oP '<testsuites[^>]*failures="\K[0-9]+' "$LATEST_REPORT" || echo "0")
 
-# 結果を表示
+# Display results
 echo "================================================="
 if [ "$TOTAL_FAILURES" -eq 0 ]; then
   echo "ALL TESTS PASSED ($TOTAL_TESTS tests)"
@@ -122,10 +131,10 @@ else
   echo "================================================="
   echo ""
 
-  # 失敗したテストの詳細を抽出して表示
+  # Extract and display failed test details
   FAILURE_COUNT=0
 
-  # XML を行ごとに処理
+  # Process XML line by line
   IN_FAILURE=false
   CURRENT_TESTCASE=""
   CURRENT_CLASSNAME=""
@@ -133,35 +142,35 @@ else
   CURRENT_CONTENT=""
 
   while IFS= read -r line; do
-    # testcase タグの開始を検出
+    # Detect start of testcase tag
     if echo "$line" | grep -q '<testcase.*name='; then
       CURRENT_TESTCASE=$(echo "$line" | grep -oP 'name="\K[^"]+' || echo "")
       CURRENT_CLASSNAME=$(echo "$line" | grep -oP 'classname="\K[^"]+' || echo "")
     fi
 
-    # failure タグの開始を検出
+    # Detect start of failure tag
     if echo "$line" | grep -q '<failure'; then
       IN_FAILURE=true
       CURRENT_MESSAGE=$(echo "$line" | grep -oP 'message="\K[^"]+' || echo "")
     fi
 
-    # failure の内容を収集
+    # Collect failure content
     if [ "$IN_FAILURE" = true ]; then
       CURRENT_CONTENT+="$line"
 
-      # failure タグの終了を検出
+      # Detect end of failure tag
       if echo "$line" | grep -q '</failure>'; then
         IN_FAILURE=false
         FAILURE_COUNT=$((FAILURE_COUNT + 1))
 
-        # ファイルパスと行番号を抽出
+        # Extract file path and line number
         FILE_INFO=$(echo "$CURRENT_MESSAGE" | sed 's/FAILED: //' || echo "")
 
-        # CDATA から期待値と実際の値を抽出
+        # Extract expected and actual values from CDATA
         EXPECTED=$(echo "$CURRENT_CONTENT" | grep -oP "Expecting:\s*'\K[^']*" || echo "")
         ACTUAL=$(echo "$CURRENT_CONTENT" | grep -oP "but was\s*'\K[^']*" || echo "")
 
-        # 結果を表示
+        # Display results
         echo "[$FAILURE_COUNT] $CURRENT_CLASSNAME :: $CURRENT_TESTCASE"
         if [ -n "$FILE_INFO" ]; then
           echo "    File: $FILE_INFO"
@@ -174,7 +183,7 @@ else
         fi
         echo ""
 
-        # リセット
+        # Reset
         CURRENT_CONTENT=""
       fi
     fi

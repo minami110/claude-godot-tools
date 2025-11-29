@@ -12,8 +12,8 @@ claude plugin marketplace add minami110/claude-godot-tools
 
 2. Install plugins:
 ```bash
-claude plugin install gdscript-toolkit@minami110
-claued plugin install gdunit4-toolkit@minami110
+claude plugin install gdscript-toolkit@claude-godot-tools
+claued plugin install gdunit4-toolkit@claude-godot-tools
 ```
 
 ## Plugins

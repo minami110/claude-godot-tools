@@ -5,10 +5,21 @@
 
 set -e
 
-# Godot 実行ファイルのパス（環境変数で上書き可能）
+# Godot executable path (can be overridden by environment variable)
 GODOT_CMD="${GODOT_PATH:-godot}"
 
-# ヘルプメッセージを表示する関数
+# Use current working directory as project root
+PROJECT_ROOT="$(pwd)"
+
+# Check if this is a Godot project
+if [ ! -f "$PROJECT_ROOT/project.godot" ]; then
+  echo "Error: project.godot not found in $PROJECT_ROOT"
+  echo ""
+  echo "Please run this script from a Godot project directory."
+  exit 1
+fi
+
+# Function to display help message
 show_help() {
   cat << 'EOF'
 Usage: ./refresh_godot_lsp.sh [OPTIONS]
@@ -58,7 +69,7 @@ TROUBLESHOOTING:
 EOF
 }
 
-# 引数解析
+# Parse arguments
 VERBOSE=false
 
 while [[ $# -gt 0 ]]; do
@@ -82,10 +93,10 @@ done
 echo "Refreshing Godot language server cache..."
 echo ""
 
-# キャッシュファイルのパス
-CACHE_FILE=".godot/global_script_class_cache.cfg"
+# Cache file path
+CACHE_FILE="$PROJECT_ROOT/.godot/global_script_class_cache.cfg"
 
-# 既存のキャッシュファイルを削除
+# Remove existing cache file
 if [ -f "$CACHE_FILE" ]; then
   if [ "$VERBOSE" = true ]; then
     echo "Removing existing cache file: $CACHE_FILE"
@@ -93,14 +104,14 @@ if [ -f "$CACHE_FILE" ]; then
   rm -f "$CACHE_FILE"
 fi
 
-# Godot を実行してプロジェクトキャッシュを更新
+# Execute Godot to update project cache
 set +e
 if [ "$VERBOSE" = true ]; then
-  # Verbose モード: すべてのログを表示
+  # Verbose mode: show all logs
   $GODOT_CMD --headless --import --quit
   GODOT_EXIT_CODE=$?
 else
-  # 通常モード: 重要なメッセージのみ表示（エラーとクラス登録）
+  # Normal mode: show only important messages (errors and class registration)
   $GODOT_CMD --headless --import --quit 2>&1 | grep -E "(ERROR|SCRIPT ERROR|update_scripts_classes|TestLsp)"
   GODOT_EXIT_CODE=$?
 fi
