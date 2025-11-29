@@ -11,16 +11,27 @@
         {
             "name": "gdscript-toolkit",
             "source": "./gdscript-toolkit",
-            "description": "GDScript utilities for Claude plugins",
+            "description": "GDScript utilities for file management and validation",
             "version": "1.0.0",
             "license": "MIT",
             "category": "development",
             "strict": false,
             "skills": [
                 "./skills/gdscript-file-manager",
-                "./skills/gdunit4-test-runner",
-                "./skills/gdunit4-test-writer",
                 "./skills/gdscript-validate"
+            ]
+        },
+        {
+            "name": "gdunit4-toolkit",
+            "source": "./gdunit4-toolkit",
+            "description": "gdUnit4 testing framework integration for Godot",
+            "version": "1.0.0",
+            "license": "MIT",
+            "category": "development",
+            "strict": false,
+            "skills": [
+                "./skills/gdunit4-test-runner",
+                "./skills/gdunit4-test-writer"
             ]
         }
     ]

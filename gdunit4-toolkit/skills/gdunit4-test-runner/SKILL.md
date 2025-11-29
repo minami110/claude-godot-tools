@@ -17,6 +17,8 @@ Run GDUnit4 tests using the test wrapper script.
 
 ## Test Execution
 
+Run tests using the wrapper script included in this skill (`scripts/run_test.sh`).
+
 ### Run All Tests
 
 ```bash
