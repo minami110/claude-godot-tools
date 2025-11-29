@@ -1,5 +1,5 @@
 {
-    "name": "gdscript",
+    "name": "gdscript-toolkit",
     "description": "GDScript utilities for Claude plugins",
     "version": "1.0.0",
     "author": {

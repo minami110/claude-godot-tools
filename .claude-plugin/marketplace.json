@@ -1,5 +1,6 @@
 {
-    "name": "claude-marketplace",
+    "name": "claude-godot-tools",
+    "description": "A collection of Claude plugins for Godot Engine development.",
     "owner": {
         "name": "Minami Tomonobu"
     },

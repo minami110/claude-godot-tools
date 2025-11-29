@@ -55,4 +55,4 @@ ls -la <directory>
 - Always process both files together to avoid breaking project references
 - Verify files before operations using `ls` commands
 
-See [examples.md](examples.md) for detailed examples and troubleshooting.
+See @examples.md for detailed examples and troubleshooting.
