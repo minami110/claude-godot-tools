@@ -181,15 +181,16 @@ if [ "$TOTAL_FAILURES" -gt 0 ]; then
 
         # Extract expected and actual values from CDATA
         EXPECTED=$(echo "$CURRENT_CONTENT" | grep -oP "Expecting:\s*'\K[^']*" || echo "")
-        ACTUAL=$(echo "$CURRENT_CONTENT" | grep -oP "but was\s*'\K[^']*" || echo "")
+        # Support both "but is" and "but was" patterns
+        ACTUAL=$(echo "$CURRENT_CONTENT" | grep -oP "but (?:is|was)\s*'\K[^']*" || echo "")
 
         # Escape quotes, backslashes, and control characters for JSON
-        CURRENT_CLASSNAME_ESC=$(echo "$CURRENT_CLASSNAME" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
-        CURRENT_TESTCASE_ESC=$(echo "$CURRENT_TESTCASE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
-        FILE_PATH_ESC=$(echo "$FILE_PATH" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
-        EXPECTED_ESC=$(echo "$EXPECTED" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
-        ACTUAL_ESC=$(echo "$ACTUAL" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
-        CURRENT_MESSAGE_ESC=$(echo "$CURRENT_MESSAGE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        CURRENT_CLASSNAME_ESC=$(echo "$CURRENT_CLASSNAME" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+        CURRENT_TESTCASE_ESC=$(echo "$CURRENT_TESTCASE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+        FILE_PATH_ESC=$(echo "$FILE_PATH" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+        EXPECTED_ESC=$(echo "$EXPECTED" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+        ACTUAL_ESC=$(echo "$ACTUAL" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
+        CURRENT_MESSAGE_ESC=$(echo "$CURRENT_MESSAGE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g')
 
         # Add failure object
         JSON_OUTPUT+="{"
