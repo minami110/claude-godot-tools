@@ -18,7 +18,8 @@
             "strict": false,
             "skills": [
                 "./skills/gdscript-file-manager",
-                "./skills/gdscript-validate"
+                "./skills/gdscript-validate",
+                "./skills/gdscript-format"
             ]
         },
         {
