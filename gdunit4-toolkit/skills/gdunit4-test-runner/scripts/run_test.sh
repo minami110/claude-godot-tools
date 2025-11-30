@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # gdUnit4 Test Wrapper Script
-# Suppresses Godot logs and displays only failed tests
+# Outputs test results in JSON format for AI analysis
 
 set -e
 
@@ -82,10 +82,6 @@ if [ ${#TARGETS[@]} -eq 0 ]; then
   TARGETS=("tests/")
 fi
 
-# Run tests
-echo "Running tests..."
-echo ""
-
 # Add multiple targets as -a options
 TARGET_ARGS=()
 for target in "${TARGETS[@]}"; do
@@ -118,23 +114,27 @@ fi
 # Extract information from XML
 TOTAL_TESTS=$(grep -oP '<testsuites[^>]*tests="\K[0-9]+' "$LATEST_REPORT" || echo "0")
 TOTAL_FAILURES=$(grep -oP '<testsuites[^>]*failures="\K[0-9]+' "$LATEST_REPORT" || echo "0")
+TOTAL_PASSED=$((TOTAL_TESTS - TOTAL_FAILURES))
 
-# Display results
-echo "================================================="
+# Build JSON output
+JSON_OUTPUT="{"
+JSON_OUTPUT+="\"summary\":{"
+JSON_OUTPUT+="\"total\":$TOTAL_TESTS,"
+JSON_OUTPUT+="\"passed\":$TOTAL_PASSED,"
+JSON_OUTPUT+="\"failed\":$TOTAL_FAILURES,"
+
 if [ "$TOTAL_FAILURES" -eq 0 ]; then
-  echo "ALL TESTS PASSED ($TOTAL_TESTS tests)"
-  echo "================================================="
-  echo ""
-  exit 0
+  JSON_OUTPUT+="\"status\":\"passed\""
 else
-  echo "TEST FAILURES ($TOTAL_FAILURES of $TOTAL_TESTS tests failed)"
-  echo "================================================="
-  echo ""
+  JSON_OUTPUT+="\"status\":\"failed\""
+fi
 
-  # Extract and display failed test details
+JSON_OUTPUT+="},"
+JSON_OUTPUT+="\"failures\":["
+
+# Extract failed test details if any
+if [ "$TOTAL_FAILURES" -gt 0 ]; then
   FAILURE_COUNT=0
-
-  # Process XML line by line
   IN_FAILURE=false
   CURRENT_TESTCASE=""
   CURRENT_CLASSNAME=""
@@ -161,35 +161,63 @@ else
       # Detect end of failure tag
       if echo "$line" | grep -q '</failure>'; then
         IN_FAILURE=false
+
+        # Add comma if not first failure
+        if [ "$FAILURE_COUNT" -gt 0 ]; then
+          JSON_OUTPUT+=","
+        fi
         FAILURE_COUNT=$((FAILURE_COUNT + 1))
 
         # Extract file path and line number
         FILE_INFO=$(echo "$CURRENT_MESSAGE" | sed 's/FAILED: //' || echo "")
+        # Handle Godot paths like res://path/to/file.gd:123
+        if [[ "$FILE_INFO" =~ ^(res://[^:]+):([0-9]+)$ ]]; then
+          FILE_PATH="${BASH_REMATCH[1]}"
+          LINE_NUM="${BASH_REMATCH[2]}"
+        else
+          FILE_PATH="$FILE_INFO"
+          LINE_NUM="0"
+        fi
 
         # Extract expected and actual values from CDATA
         EXPECTED=$(echo "$CURRENT_CONTENT" | grep -oP "Expecting:\s*'\K[^']*" || echo "")
         ACTUAL=$(echo "$CURRENT_CONTENT" | grep -oP "but was\s*'\K[^']*" || echo "")
 
-        # Display results
-        echo "[$FAILURE_COUNT] $CURRENT_CLASSNAME :: $CURRENT_TESTCASE"
-        if [ -n "$FILE_INFO" ]; then
-          echo "    File: $FILE_INFO"
-        fi
-        if [ -n "$EXPECTED" ]; then
-          echo "    Expected: '$EXPECTED'"
-        fi
-        if [ -n "$ACTUAL" ]; then
-          echo "    Actual:   '$ACTUAL'"
-        fi
-        echo ""
+        # Escape quotes, backslashes, and control characters for JSON
+        CURRENT_CLASSNAME_ESC=$(echo "$CURRENT_CLASSNAME" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        CURRENT_TESTCASE_ESC=$(echo "$CURRENT_TESTCASE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        FILE_PATH_ESC=$(echo "$FILE_PATH" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        EXPECTED_ESC=$(echo "$EXPECTED" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        ACTUAL_ESC=$(echo "$ACTUAL" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+        CURRENT_MESSAGE_ESC=$(echo "$CURRENT_MESSAGE" | tr -d '\n\r' | sed 's/\\/\\\\/g; s/"/\\"/g')
+
+        # Add failure object
+        JSON_OUTPUT+="{"
+        JSON_OUTPUT+="\"class\":\"$CURRENT_CLASSNAME_ESC\","
+        JSON_OUTPUT+="\"method\":\"$CURRENT_TESTCASE_ESC\","
+        JSON_OUTPUT+="\"file\":\"$FILE_PATH_ESC\","
+        JSON_OUTPUT+="\"line\":$LINE_NUM,"
+        JSON_OUTPUT+="\"expected\":\"$EXPECTED_ESC\","
+        JSON_OUTPUT+="\"actual\":\"$ACTUAL_ESC\","
+        JSON_OUTPUT+="\"message\":\"$CURRENT_MESSAGE_ESC\""
+        JSON_OUTPUT+="}"
 
         # Reset
         CURRENT_CONTENT=""
       fi
     fi
   done < "$LATEST_REPORT"
+fi
 
-  echo "================================================="
-  echo ""
+JSON_OUTPUT+="]"
+JSON_OUTPUT+="}"
+
+# Output JSON
+echo "$JSON_OUTPUT"
+
+# Exit with appropriate code
+if [ "$TOTAL_FAILURES" -eq 0 ]; then
+  exit 0
+else
   exit 1
 fi
