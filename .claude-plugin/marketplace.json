@@ -11,15 +11,19 @@
         {
             "name": "gdscript-toolkit",
             "source": "./gdscript-toolkit",
-            "description": "GDScript utilities for file management and validation",
-            "version": "1.0.0",
+            "description": "GDScript utilities for file management, validation, formatting, and API research",
+            "version": "1.1.0",
             "license": "MIT",
             "category": "development",
             "strict": false,
             "skills": [
                 "./skills/gdscript-file-manager",
                 "./skills/gdscript-validate",
-                "./skills/gdscript-format"
+                "./skills/gdscript-format",
+                "./skills/gdscript-api-lookup"
+            ],
+            "agents": [
+                "./agents/gdscript-researcher.md"
             ]
         },
         {
