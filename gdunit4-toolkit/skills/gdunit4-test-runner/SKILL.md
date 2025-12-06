@@ -25,7 +25,7 @@ Run tests using the wrapper script included in this skill (`scripts/run_test.sh`
 scripts/run_test.sh
 ```
 
-Runs all tests in `tests/` directory with suppressed Godot logs (only shows failures).
+Scans entire project for tests.
 
 ### Run Specific Test File
 
@@ -55,23 +55,42 @@ Shows all Godot logs (useful for debugging test issues).
 
 ## Understanding Results
 
+The script outputs test results in JSON format for easy parsing.
+
 ### Success
-```
-=================================================
-ALL TESTS PASSED (X tests)
-=================================================
+```json
+{
+  "summary": {
+    "total": 186,
+    "passed": 186,
+    "failed": 0,
+    "status": "passed"
+  },
+  "failures": []
+}
 ```
 
 ### Failure
-```
-=================================================
-TEST FAILURES (X of Y tests failed)
-=================================================
-
-[1] TestClassName :: test_method_name
-    File: tests/test_file.gd:42
-    Expected: 'expected_value'
-    Actual:   'actual_value'
+```json
+{
+  "summary": {
+    "total": 10,
+    "passed": 8,
+    "failed": 2,
+    "status": "failed"
+  },
+  "failures": [
+    {
+      "class": "TestClassName",
+      "method": "test_method_name",
+      "file": "res://tests/test_file.gd",
+      "line": 42,
+      "expected": "expected_value",
+      "actual": "actual_value",
+      "message": "FAILED: res://tests/test_file.gd:42"
+    }
+  ]
+}
 ```
 
 ## Exit Codes

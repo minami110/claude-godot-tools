@@ -79,7 +79,7 @@ done
 
 # Default target if none specified
 if [ ${#TARGETS[@]} -eq 0 ]; then
-  TARGETS=("tests/")
+  TARGETS=("")
 fi
 
 # Add multiple targets as -a options
