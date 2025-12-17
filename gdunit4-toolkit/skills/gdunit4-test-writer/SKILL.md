@@ -11,7 +11,7 @@ Write gdUnit4 test code for GDScript files with proper assertions and test struc
 ## Workflow
 
 1. **Analyze target file** - Read the GDScript file to understand what needs testing
-2. **Check gdUnit4 docs** - Use Context7 (`/websites/mikeschulze_github_io-gdunit4`) if needed
+2. **Check gdUnit4 docs** - Use Context7 (`/websites/godot-gdunit-labs_github_io_gdunit4`) if needed
 3. **Select assertions** - Use type-specific assertions (see [references/assertions.md])
 4. **Create test file** - Place in `res://tests/` directory
 5. **Validate** - Use gdscript-validate skill to check for errors
@@ -54,4 +54,4 @@ func test_with_node() -> void:
 ## Context7 Library ID
 
 For detailed gdUnit4 documentation:
-- Library ID: `/websites/mikeschulze_github_io-gdunit4`
+- Library ID: `/websites/godot-gdunit-labs_github_io_gdunit4`
