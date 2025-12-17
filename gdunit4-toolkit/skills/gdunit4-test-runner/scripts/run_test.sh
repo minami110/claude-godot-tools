@@ -103,6 +103,12 @@ else
 fi
 set -e
 
+# Check if Godot crashed
+CRASHED=false
+if [ "$GODOT_EXIT_CODE" -ne 0 ]; then
+  CRASHED=true
+fi
+
 # Get the latest report file
 LATEST_REPORT=$(ls -t "$PROJECT_ROOT/reports/"*/results.xml 2>/dev/null | head -1)
 
@@ -122,8 +128,11 @@ JSON_OUTPUT+="\"summary\":{"
 JSON_OUTPUT+="\"total\":$TOTAL_TESTS,"
 JSON_OUTPUT+="\"passed\":$TOTAL_PASSED,"
 JSON_OUTPUT+="\"failed\":$TOTAL_FAILURES,"
+JSON_OUTPUT+="\"crashed\":$CRASHED,"
 
-if [ "$TOTAL_FAILURES" -eq 0 ]; then
+if [ "$CRASHED" = true ]; then
+  JSON_OUTPUT+="\"status\":\"crashed\""
+elif [ "$TOTAL_FAILURES" -eq 0 ]; then
   JSON_OUTPUT+="\"status\":\"passed\""
 else
   JSON_OUTPUT+="\"status\":\"failed\""
@@ -217,7 +226,9 @@ JSON_OUTPUT+="}"
 echo "$JSON_OUTPUT"
 
 # Exit with appropriate code
-if [ "$TOTAL_FAILURES" -eq 0 ]; then
+if [ "$CRASHED" = true ]; then
+  exit 2
+elif [ "$TOTAL_FAILURES" -eq 0 ]; then
   exit 0
 else
   exit 1
