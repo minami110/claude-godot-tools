@@ -1,6 +1,7 @@
 ---
 name: gdUnit4 Test Runner
 description: Run gdUnit4 tests for Godot projects. Use after implementing features, fixing bugs, or modifying GDScript files to verify correctness.
+context: fork
 ---
 
 # GDScript Test
@@ -105,11 +106,21 @@ The script outputs test results in JSON format for easy parsing.
     "crashed": true,
     "status": "crashed"
   },
+  "crash_details": {
+    "crash_info": "handle_crash: Program crashed with signal 11\n...",
+    "script_errors": "SCRIPT ERROR: Parse Error: ...\n...",
+    "engine_errors": "ERROR: Failed to load script ...\n..."
+  },
   "failures": []
 }
 ```
 
 Godot crashed during test execution. Only tests completed before crash are reported.
+
+The `crash_details` object includes:
+- `crash_info`: Crash signal and C++ backtrace (if available)
+- `script_errors`: GDScript parse errors with file paths and line numbers
+- `engine_errors`: Engine-level errors (resource loading failures, etc.)
 
 ## Exit Codes
 

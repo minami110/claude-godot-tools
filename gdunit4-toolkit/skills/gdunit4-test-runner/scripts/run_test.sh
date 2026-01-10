@@ -88,25 +88,48 @@ for target in "${TARGETS[@]}"; do
   TARGET_ARGS+=("-a" "$target")
 done
 
+# Create temporary file for capturing Godot output
+GODOT_LOG=$(mktemp)
+trap "rm -f $GODOT_LOG" EXIT
+
 # Execute Godot to run tests
 set +e
 if [ "$VERBOSE" = true ]; then
-  # Verbose mode: show all logs
+  # Verbose mode: show all logs and save to file
   $GODOT_CMD --headless -s -d "$GDUNIT4_PATH/bin/GdUnitCmdTool.gd" \
-    "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c
+    "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c 2>&1 | tee "$GODOT_LOG"
   GODOT_EXIT_CODE=$?
 else
-  # Normal mode: suppress Godot logs
+  # Normal mode: save logs to file but don't display
   $GODOT_CMD --headless -s -d "$GDUNIT4_PATH/bin/GdUnitCmdTool.gd" \
-    "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c > /dev/null 2>&1
+    "${TARGET_ARGS[@]}" --ignoreHeadlessMode -c > "$GODOT_LOG" 2>&1
   GODOT_EXIT_CODE=$?
 fi
 set -e
 
-# Check if Godot crashed
+# Check if Godot crashed and extract crash information
 CRASHED=false
-if [ "$GODOT_EXIT_CODE" -ne 0 ]; then
+CRASH_INFO=""
+SCRIPT_ERRORS=""
+ENGINE_ERRORS=""
+
+# Check if Godot actually crashed (not just test failure)
+# gdUnit4 returns exit code 100 for test failures, which is not a crash
+if grep -q "handle_crash:" "$GODOT_LOG"; then
   CRASHED=true
+
+  # Extract crash information
+  CRASH_INFO=$(grep -A 50 "handle_crash:" "$GODOT_LOG" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+
+  # Extract SCRIPT ERROR messages
+  if grep -q "SCRIPT ERROR:" "$GODOT_LOG"; then
+    SCRIPT_ERRORS=$(grep -A 15 "SCRIPT ERROR:" "$GODOT_LOG" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+  fi
+
+  # Extract ENGINE ERROR messages
+  if grep -q "^ERROR:" "$GODOT_LOG"; then
+    ENGINE_ERRORS=$(grep -A 5 "^ERROR:" "$GODOT_LOG" | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+  fi
 fi
 
 # Get the latest report file
@@ -139,6 +162,28 @@ else
 fi
 
 JSON_OUTPUT+="},"
+
+# Add crash information if crashed
+if [ "$CRASHED" = true ]; then
+  JSON_OUTPUT+="\"crash_details\":{"
+
+  if [ -n "$CRASH_INFO" ]; then
+    JSON_OUTPUT+="\"crash_info\":\"$CRASH_INFO\","
+  fi
+
+  if [ -n "$SCRIPT_ERRORS" ]; then
+    JSON_OUTPUT+="\"script_errors\":\"$SCRIPT_ERRORS\","
+  fi
+
+  if [ -n "$ENGINE_ERRORS" ]; then
+    JSON_OUTPUT+="\"engine_errors\":\"$ENGINE_ERRORS\","
+  fi
+
+  # Remove trailing comma if present
+  JSON_OUTPUT="${JSON_OUTPUT%,}"
+  JSON_OUTPUT+="},"
+fi
+
 JSON_OUTPUT+="\"failures\":["
 
 # Extract failed test details if any
