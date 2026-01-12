@@ -24,24 +24,24 @@ Format and lint GDScript files using the gdscript-formatter tool from GDQuest.
 
 ## Format
 
-Format GDScript files using the format script included in this skill (`scripts/format.sh`).
+Format GDScript files using the format script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh`).
 
 ### Single File
 
 ```bash
-scripts/format.sh path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file.gd
 ```
 
 ### Multiple Files
 
 ```bash
-scripts/format.sh path/to/file1.gd path/to/file2.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file1.gd path/to/file2.gd
 ```
 
 ### Safe Mode
 
 ```bash
-scripts/format.sh --safe path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --safe path/to/file.gd
 ```
 
 Verifies that formatting doesn't change code semantics.
@@ -49,7 +49,7 @@ Verifies that formatting doesn't change code semantics.
 ### Check Mode (CI)
 
 ```bash
-scripts/format.sh --check path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --check path/to/file.gd
 ```
 
 Returns exit code 1 if changes are needed (useful for CI/CD).
@@ -57,26 +57,26 @@ Returns exit code 1 if changes are needed (useful for CI/CD).
 ### Reorder Code
 
 ```bash
-scripts/format.sh --reorder-code path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --reorder-code path/to/file.gd
 ```
 
 Reorders code according to GDScript style guide.
 
 ## Lint
 
-Check code style using the lint script included in this skill (`scripts/lint.sh`).
+Check code style using the lint script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh`).
 
 ### Single File
 
 ```bash
-scripts/lint.sh path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh path/to/file.gd
 ```
 
 ### With Options
 
 ```bash
-scripts/lint.sh --max-line-length 120 path/to/file.gd
-scripts/lint.sh --disable unused-argument,private-access path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh --max-line-length 120 path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh --disable unused-argument,private-access path/to/file.gd
 ```
 
 ## Lint Rules

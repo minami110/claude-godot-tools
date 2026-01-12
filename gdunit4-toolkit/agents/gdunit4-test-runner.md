@@ -20,7 +20,7 @@ Specialized agent for running and analyzing gdUnit4 tests.
 
 ## Workflow
 
-1. Run tests using `scripts/run_test.sh`
+1. Run tests using `${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh`
 2. Parse JSON output for test results
 3. For failures: identify root cause and suggest fixes
 4. Report summary back to main conversation

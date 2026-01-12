@@ -26,12 +26,12 @@ Run GDUnit4 tests using the test wrapper script.
 
 ## Test Execution
 
-Run tests using the wrapper script included in this skill (`scripts/run_test.sh`).
+Run tests using the wrapper script included in this skill.
 
 ### Run All Tests
 
 ```bash
-scripts/run_test.sh
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh
 ```
 
 Scans entire project for tests.
@@ -39,25 +39,25 @@ Scans entire project for tests.
 ### Run Specific Test File
 
 ```bash
-scripts/run_test.sh tests/test_foo.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/test_foo.gd
 ```
 
 ### Run Multiple Tests
 
 ```bash
-scripts/run_test.sh tests/test_foo.gd tests/test_bar.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/test_foo.gd tests/test_bar.gd
 ```
 
 ### Run Tests in Directory
 
 ```bash
-scripts/run_test.sh tests/application/
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/application/
 ```
 
 ### Verbose Mode
 
 ```bash
-scripts/run_test.sh -v
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh -v
 ```
 
 Shows all Godot logs (useful for debugging test issues).
