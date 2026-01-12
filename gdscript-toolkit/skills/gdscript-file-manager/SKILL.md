@@ -1,6 +1,8 @@
 ---
 name: GDScript File Manager
 description: Move, rename, or delete GDScript files with their .uid files for Godot projects. Use when reorganizing code, renaming scripts, or removing unused GDScript files.
+allowed-tools:
+  - Bash
 ---
 
 # GDScript File Manager

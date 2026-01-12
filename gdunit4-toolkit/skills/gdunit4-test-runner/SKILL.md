@@ -2,6 +2,14 @@
 name: gdUnit4 Test Runner
 description: Run gdUnit4 tests for Godot projects. Use after implementing features, fixing bugs, or modifying GDScript files to verify correctness.
 context: fork
+agent: gdunit4-test-runner
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/ensure-environment.sh"
+          once: true
 ---
 
 # GDScript Test

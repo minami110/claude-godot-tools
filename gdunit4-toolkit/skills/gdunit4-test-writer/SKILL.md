@@ -1,7 +1,14 @@
 ---
 name: gdUnit4 Test Writer
 description: Write gdUnit4 test code with type-specific assertions, signal testing, and scene runner support. Use when creating or updating tests for GDScript files.
-allowed-tools: mcp__context7__get-library-docs, mcp__context7__resolve-library-id, Read, Write, Edit, Glob, Grep
+allowed-tools:
+  - mcp__context7__resolve-library-id
+  - mcp__context7__query-docs
+  - Read
+  - Write
+  - Edit
+  - Glob
+  - Grep
 ---
 
 # gdUnit4 Test Writer
@@ -46,10 +53,10 @@ func test_with_node() -> void:
 
 ## References
 
-- [references/assertions.md] - Complete assertion reference
-- [references/test-structure.md] - Test lifecycle and structure
-- [references/signals.md] - Signal testing guide
-- [references/scene-runner.md] - Scene runner for integration tests
+- [references/assertions.md](assertions.md) - Complete assertion reference
+- [references/test-structure.md](test-structure.md)- Test lifecycle and structure
+- [references/signals.md](signals.md) - Signal testing guide
+- [references/scene-runner.md](scene-runner.md) - Scene runner for integration tests
 
 ## Context7 Library ID
 

@@ -3,7 +3,10 @@ name: gdscript-api-lookup
 description: |
   Look up GDScript and Godot Engine documentation using Deepwiki and Context7.
   Use when you need to find implementation approaches, APIs, or code examples for Godot projects.
-allowed-tools: mcp__deepwiki__ask_question, mcp__context7__get-library-docs
+allowed-tools:
+  - mcp__deepwiki__ask_question
+  - mcp__context7__resolve-library-id
+  - mcp__context7__query-docs
 ---
 
 # GDScript API Lookup

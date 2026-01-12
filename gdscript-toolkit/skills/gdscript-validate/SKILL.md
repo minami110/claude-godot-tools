@@ -1,6 +1,16 @@
 ---
 name: GDScript Validate
 description: Validate GDScript changes by refreshing Godot cache and checking diagnostics. Use after creating or editing GDScript files.
+allowed-tools:
+  - Bash
+  - mcp__ide__getDiagnostics
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdscript-validate/scripts/ensure-godot.sh"
+          once: true
 ---
 
 # GDScript Validate

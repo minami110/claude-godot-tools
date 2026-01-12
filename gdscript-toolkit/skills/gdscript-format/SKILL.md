@@ -1,6 +1,15 @@
 ---
 name: GDScript Format
 description: Format and lint GDScript files using gdscript-formatter. Use after editing GDScript files to ensure code style consistency.
+allowed-tools:
+  - Bash
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/ensure-binary.sh"
+          once: true
 ---
 
 # GDScript Format
@@ -12,16 +21,6 @@ Format and lint GDScript files using the gdscript-formatter tool from GDQuest.
 - After creating or editing GDScript files
 - Before committing code to ensure style consistency
 - When running code quality checks
-
-## Setup
-
-Install the formatter binary using the install script included in this skill (`scripts/install.sh`).
-
-```bash
-scripts/install.sh
-```
-
-This downloads the appropriate binary for your platform (Linux/Windows x86_64) to the skill's `bin/` directory.
 
 ## Format
 
