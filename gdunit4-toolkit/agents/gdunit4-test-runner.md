@@ -6,6 +6,12 @@ description: |
 tools: Bash, Read, Grep, Glob
 skills: gdunit4-test-runner
 model: haiku
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/intercept-test-command.sh"
 ---
 
 # gdUnit4 Test Runner Agent
