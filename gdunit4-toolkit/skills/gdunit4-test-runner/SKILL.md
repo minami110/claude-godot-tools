@@ -1,8 +1,13 @@
 ---
-name: gdUnit4 Test Runner
-description: Run gdUnit4 tests for Godot projects. Use after implementing features, fixing bugs, or modifying GDScript files to verify correctness.
+name: gdunit4-test-runner
+description: |
+  Run gdUnit4 tests for Godot projects.
+  Use after implementing features, fixing bugs, or modifying GDScript files.
+  USE PROACTIVELY to verify code changes.
 context: fork
 agent: gdunit4-test-runner
+allowed-tools:
+  - Bash
 hooks:
   PreToolUse:
     - matcher: "Bash"

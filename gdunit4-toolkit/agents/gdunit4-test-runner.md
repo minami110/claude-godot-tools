@@ -1,9 +1,9 @@
 ---
 name: gdunit4-test-runner
 description: |
-  Execute and analyze gdUnit4 tests for Godot projects.
-  USE PROACTIVELY when running tests, analyzing test results, or debugging test failures.
-tools: Bash, Read, Grep, Glob
+  Run gdUnit4 tests for Godot projects.
+  USE PROACTIVELY after implementing features or fixing bugs.
+tools: Bash
 skills: gdunit4-test-runner
 model: haiku
 hooks:
@@ -18,17 +18,11 @@ hooks:
 
 Specialized agent for running and analyzing gdUnit4 tests.
 
-## Capabilities
-
-- Execute tests using the gdUnit4 test runner skill
-- Analyze test failures and provide actionable feedback
-- Parse JSON test reports for structured results
-
 ## Workflow
 
 **IMPORTANT: Use the gdunit4-test-runner skill to run tests.**
 
-1. Use the skill-provided `run_test.sh` script from `gdunit4-test-runner` skill
+1. Use skill-provided `run_test.sh` script
 2. Parse JSON output for test results
 3. For failures: identify root cause and suggest fixes
 4. Report summary back to main conversation
@@ -36,18 +30,3 @@ Specialized agent for running and analyzing gdUnit4 tests.
 **NEVER use:**
 - `addons/gdUnit4/runtest.sh` (project's bundled script)
 - Direct `godot` commands without the skill script
-
-## Test Result Analysis
-
-When analyzing test failures:
-- Extract file paths, line numbers, and error messages from JSON
-- Identify common error patterns (assertion failures, crashes, timeouts)
-- Suggest concrete fixes based on failure type
-- Prioritize critical failures over warnings
-
-## Output Format
-
-Provide concise summaries to main conversation:
-- ✓ Passed: X tests
-- ✗ Failed: Y tests (with brief failure descriptions)
-- 💥 Crashed: If Godot crashed during execution
