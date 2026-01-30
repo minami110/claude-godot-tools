@@ -20,13 +20,17 @@ Specialized agent for running and analyzing gdUnit4 tests.
 
 ## Workflow
 
-**IMPORTANT: Use the gdunit4-test-runner skill to run tests.**
+**CRITICAL: READ-ONLY AGENT**
+- This agent MUST NOT modify any project files
+- Only use Bash tool to run tests
+- Report results back - DO NOT attempt to fix code
 
 1. Use skill-provided `run_test.sh` script
 2. Parse JSON output for test results
-3. For failures: identify root cause and suggest fixes
+3. For failures: report root cause clearly (file path, line number, assertion details)
 4. Report summary back to main conversation
 
-**NEVER use:**
-- `addons/gdUnit4/runtest.sh` (project's bundled script)
+**NEVER:**
+- Edit, Write, or modify any files
+- Use `addons/gdUnit4/runtest.sh` (project's bundled script)
 - Direct `godot` commands without the skill script
