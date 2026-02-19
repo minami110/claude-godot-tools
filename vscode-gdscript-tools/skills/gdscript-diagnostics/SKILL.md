@@ -1,5 +1,5 @@
 ---
-name: gdscript-validate
+name: gdscript-diagnostics
 description: Validate GDScript changes by refreshing Godot cache and checking diagnostics. Use after creating or editing GDScript files.
 allowed-tools:
   - Bash
@@ -9,11 +9,11 @@ hooks:
     - matcher: "Bash"
       hooks:
         - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdscript-validate/scripts/ensure-godot.sh"
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdscript-diagnostics/scripts/ensure-godot.sh"
           once: true
 ---
 
-# GDScript Validate
+# GDScript Diagnostics
 
 Validate GDScript file changes by refreshing Godot's language server cache and checking for errors/warnings.
 
@@ -27,7 +27,7 @@ After creating or editing GDScript files (`.gd`):
 
 ### Step 1: Refresh Godot Cache
 
-Run the cache refresh script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-validate/scripts/refresh_godot_lsp.sh`).
+Run the cache refresh script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-diagnostics/scripts/refresh_godot_lsp.sh`).
 
 - Updates Godot's language server cache to recognize GDScript changes.
 - **Important**: When processing multiple files, run this once after editing all files (not per file).
