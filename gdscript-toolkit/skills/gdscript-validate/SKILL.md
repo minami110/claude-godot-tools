@@ -1,5 +1,5 @@
 ---
-name: GDScript Validate
+name: gdscript-validate
 description: Validate GDScript changes by refreshing Godot cache and checking diagnostics. Use after creating or editing GDScript files.
 allowed-tools:
   - Bash

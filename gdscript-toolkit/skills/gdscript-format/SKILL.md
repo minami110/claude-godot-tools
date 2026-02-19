@@ -1,5 +1,5 @@
 ---
-name: GDScript Format
+name: gdscript-format
 description: Format and lint GDScript files using gdscript-formatter. Use after editing GDScript files to ensure code style consistency.
 allowed-tools:
   - Bash
