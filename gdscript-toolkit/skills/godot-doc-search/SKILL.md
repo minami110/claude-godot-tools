@@ -38,10 +38,9 @@ Returns:
 Get code examples using keywords from Step 1:
 
 ```
-mcp__context7__get-library-docs
-  context7CompatibleLibraryID: "/websites/godotengine_en"
-  topic: "[keywords from Deepwiki response]"
-  mode: "code"
+mcp__context7__query-docs
+  libraryId: "/websites/godotengine_en"
+  query: "[keywords from Deepwiki response]"
 ```
 
 Note: Use `/websites/godotengine_en` for latest documentation (83,702+ snippets).
