@@ -8,18 +8,11 @@ context: fork
 agent: gdunit4-test-runner
 allowed-tools:
   - Bash
-hooks:
-  PreToolUse:
-    - matcher: "Bash"
-      hooks:
-        - type: command
-          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/ensure-environment.sh"
-          once: true
 ---
 
 # GDScript Test
 
-Run GDUnit4 tests using the test wrapper script.
+Run GDUnit4 tests using the gdunit4-test-runner binary.
 
 ## When to Use
 
@@ -29,14 +22,26 @@ Run GDUnit4 tests using the test wrapper script.
 - When you need to verify test coverage
 - When running CI/CD validation locally
 
+## Setup
+
+Before running tests, ensure the binary is installed:
+
+1. Check if `bin/gdunit4-test-runner` exists in the skill directory
+2. If not, run the install script:
+   ```bash
+   ${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/install.sh
+   ```
+
 ## Test Execution
 
-Run tests using the wrapper script included in this skill.
+Run tests using the binary directly.
+
+**NEVER use `addons/gdUnit4/runtest.sh` or direct `godot` commands.**
 
 ### Run All Tests
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner
 ```
 
 Scans entire project for tests.
@@ -44,32 +49,38 @@ Scans entire project for tests.
 ### Run Specific Test File
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/test_foo.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner tests/test_foo.gd
 ```
 
 ### Run Multiple Tests
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/test_foo.gd tests/test_bar.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner tests/test_foo.gd tests/test_bar.gd
 ```
 
 ### Run Tests in Directory
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh tests/application/
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner tests/application/
 ```
 
 ### Verbose Mode
 
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/run_test.sh -v
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner --verbose
 ```
 
 Shows all Godot logs (useful for debugging test issues).
 
+### Custom Godot Path
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/bin/gdunit4-test-runner --godot-path /path/to/godot
+```
+
 ## Understanding Results
 
-The script outputs test results in JSON format for easy parsing.
+The binary outputs test results in JSON format for easy parsing.
 
 ### Success
 ```json
@@ -119,21 +130,12 @@ The script outputs test results in JSON format for easy parsing.
     "crashed": true,
     "status": "crashed"
   },
-  "crash_details": {
-    "crash_info": "handle_crash: Program crashed with signal 11\n...",
-    "script_errors": "SCRIPT ERROR: Parse Error: ...\n...",
-    "engine_errors": "ERROR: Failed to load script ...\n..."
-  },
+  "crash_details": null,
   "failures": []
 }
 ```
 
 Godot crashed during test execution. Only tests completed before crash are reported.
-
-The `crash_details` object includes:
-- `crash_info`: Crash signal and C++ backtrace (if available)
-- `script_errors`: GDScript parse errors with file paths and line numbers
-- `engine_errors`: Engine-level errors (resource loading failures, etc.)
 
 ## Exit Codes
 
@@ -143,7 +145,8 @@ The `crash_details` object includes:
 
 ## Notes
 
-- Script automatically changes to project root before running tests
+- Binary automatically changes to project root before running tests
 - Test reports are saved in `reports/` directory
 - Uses gdUnit4 framework (configured in project.godot)
 - Compatible with CI/CD environments
+- Binary handles Godot existence check and error handling internally
