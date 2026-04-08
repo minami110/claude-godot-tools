@@ -12,14 +12,15 @@
       "name": "gdscript-toolkit",
       "source": "./gdscript-toolkit",
       "description": "GDScript utilities for file management, validation, formatting, and API research",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "license": "MIT",
       "category": "development",
       "strict": false,
       "skills": [
         "./skills/gdscript-file-manager",
         "./skills/gdscript-format",
-        "./skills/godot-doc-search"
+        "./skills/godot-doc-search",
+        "./skills/godot-cache-refresh"
       ],
       "agents": [
         "./agents/godot-doc-search.md"
