@@ -7,7 +7,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$SCRIPT_DIR/../bin"
-VERSION="0.1.0"
+VERSION="0.2.0"
 BASE_URL="https://github.com/minami110/gdunit4-test-runner/releases/download/${VERSION}"
 
 # Function to display help message
