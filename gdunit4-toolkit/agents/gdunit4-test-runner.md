@@ -4,7 +4,8 @@ description: |
   Run gdUnit4 tests for Godot projects and report results (read-only).
   USE PROACTIVELY to verify test status after code changes.
 tools: Bash
-skills: gdunit4-test-runner
+skills:
+  - gdunit4-test-runner
 model: haiku
 ---
 

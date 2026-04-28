@@ -4,7 +4,8 @@ description: |
   Search Godot Engine and GDScript documentation using Deepwiki and Context7.
   USE PROACTIVELY when planning Godot/GDScript implementations.
 tools: mcp__deepwiki__ask_question, mcp__context7__resolve-library-id, mcp__context7__query-docs
-skills: godot-doc-search
+skills:
+  - godot-doc-search
 model: haiku
 ---
 

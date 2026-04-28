@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 PORT="${GODOT_LSP_PORT:-6005}"
 
 if nc -z localhost "$PORT" 2>/dev/null; then

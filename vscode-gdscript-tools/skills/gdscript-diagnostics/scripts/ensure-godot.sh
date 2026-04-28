@@ -1,5 +1,6 @@
 #!/bin/bash
 # Godot Engine の存在確認
+set -euo pipefail
 
 GODOT_CMD="${GODOT_PATH:-godot}"
 

@@ -3,7 +3,7 @@
 # Godot Language Server Refresh Script
 # Run after creating/editing new GDScript classes to update project cache
 
-set -e
+set -euo pipefail
 
 # Godot executable path (can be overridden by environment variable)
 GODOT_CMD="${GODOT_PATH:-godot}"
@@ -105,17 +105,15 @@ if [ -f "$CACHE_FILE" ]; then
 fi
 
 # Execute Godot to update project cache
-set +e
+set +eo pipefail
 if [ "$VERBOSE" = true ]; then
   # Verbose mode: show all logs
   $GODOT_CMD --headless --import --quit
-  GODOT_EXIT_CODE=$?
 else
   # Normal mode: show only important messages (errors and class registration)
-  $GODOT_CMD --headless --import --quit 2>&1 | grep -E "(ERROR|SCRIPT ERROR|update_scripts_classes|TestLsp)"
-  GODOT_EXIT_CODE=$?
+  $GODOT_CMD --headless --import --quit 2>&1 | grep -E "(ERROR|SCRIPT ERROR|update_scripts_classes|TestLsp)" || true
 fi
-set -e
+set -eo pipefail
 
 echo ""
 echo "================================================="
