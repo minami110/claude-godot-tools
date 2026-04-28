@@ -1,9 +1,9 @@
 ---
 name: gdunit4-test-runner
 description: |
-  Run gdUnit4 tests for Godot projects.
-  Use after implementing features, fixing bugs, or modifying GDScript files.
-  USE PROACTIVELY to verify code changes.
+  Run gdUnit4 tests for Godot projects and report results (read-only).
+  Use to verify test status after code changes.
+  USE PROACTIVELY to check test results.
 context: fork
 agent: gdunit4-test-runner
 allowed-tools:
@@ -17,7 +17,6 @@ Run GDUnit4 tests using the gdunit4-test-runner binary.
 ## When to Use
 
 - After implementing new features
-- After fixing bugs
 - After modifying GDScript files
 - When you need to verify test coverage
 - When running CI/CD validation locally
