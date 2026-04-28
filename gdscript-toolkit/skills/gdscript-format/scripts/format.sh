@@ -3,7 +3,7 @@
 # GDScript Format Script
 # Formats GDScript files using gdscript-formatter
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BIN_DIR="$SCRIPT_DIR/../bin"

@@ -40,7 +40,7 @@ VSCode-dependent GDScript development tools requiring IDE MCP integration.
 
 ### gdunit4-toolkit (v1.5.1)
 
-[gdUnit4](https://github.com/MikeSchulze/gdUnit4) testing framework integration for Godot.
+[gdUnit4](https://github.com/godot-gdunit-labs/gdUnit4) testing framework integration for Godot.
 
 **Skills:** `gdunit4-test-runner`, `gdunit4-test-writer`
 **Agents:** `gdunit4-test-runner`

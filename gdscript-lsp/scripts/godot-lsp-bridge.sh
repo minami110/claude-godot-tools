@@ -1,6 +1,7 @@
 #!/bin/bash
 # TCP→stdio ブリッジ for Godot LSP
 # Godot エディタの Language Server Protocol (ポート 6005) に接続します
+set -euo pipefail
 
 PORT="${GODOT_LSP_PORT:-6005}"
 HOST="${GODOT_LSP_HOST:-localhost}"

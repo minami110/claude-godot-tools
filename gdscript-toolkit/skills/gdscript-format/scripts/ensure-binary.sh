@@ -1,5 +1,6 @@
 #!/bin/bash
 # gdscript-formatter の存在確認と自動インストール
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FORMATTER_PATH="$SCRIPT_DIR/../bin/gdscript-formatter"
