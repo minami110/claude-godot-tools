@@ -51,16 +51,13 @@
       "name": "gdunit4-toolkit",
       "source": "./gdunit4-toolkit",
       "description": "gdUnit4 testing framework integration for Godot",
-      "version": "2.1.1",
+      "version": "2.2.0",
       "license": "MIT",
       "category": "development",
       "strict": false,
       "skills": [
         "./skills/gdunit4-test-runner",
         "./skills/gdunit4-test-writer"
-      ],
-      "agents": [
-        "./agents/gdunit4-test-runner.md"
       ]
     }
   ]

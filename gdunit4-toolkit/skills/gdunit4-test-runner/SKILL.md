@@ -4,8 +4,6 @@ description: |
   Run gdUnit4 tests for Godot projects and report results (read-only).
   Use to verify test status after code changes.
   USE PROACTIVELY to check test results.
-context: fork
-agent: gdunit4-test-runner
 allowed-tools:
   - Bash
 ---
@@ -13,6 +11,13 @@ allowed-tools:
 # GDScript Test
 
 Run GDUnit4 tests using the gdunit4-test-runner binary.
+
+## CRITICAL: Read-Only Operation
+
+- This is a read-only operation.
+- Run the binary and report results. DO NOT edit files or attempt to fix failing tests.
+- If tests fail, report file path, line number, assertion details — then STOP.
+- NEVER use `addons/gdUnit4/runtest.sh` or direct `godot` commands.
 
 ## When to Use
 
@@ -34,8 +39,6 @@ Before running tests, ensure the binary is installed:
 ## Test Execution
 
 Run tests using the binary directly.
-
-**NEVER use `addons/gdUnit4/runtest.sh` or direct `godot` commands.**
 
 ### Run All Tests
 
