@@ -32,7 +32,7 @@ Claude Code requires the `ENABLE_LSP_TOOL=true` environment variable to use LSP 
 #### Set environment variable before launching Claude
 
 ```bash
-ENABLE_LSP_TOOL=true npx @anthropic-ai/claude-code@2.0.67
+ENABLE_LSP_TOOL=true claude
 ```
 
 ## How It Works
@@ -45,12 +45,11 @@ When you start a Claude session, this plugin:
 
 ## LSP Configuration
 
-The plugin uses the following configuration (defined in `.lsp.json`):
+The plugin uses the following configuration (defined in `.claude-plugin/plugin.json` under `lspServers`):
 
-- **Transport**: Socket connection
-- **Host**: 127.0.0.1 (localhost)
-- **Port**: 6005
-- **Command**: `nc localhost 6005` (netcat)
+- **Transport**: stdio-to-TCP bridge (`scripts/godot-lsp-bridge.sh`, netcat-based)
+- **Host**: localhost — override with `GODOT_LSP_HOST`
+- **Port**: 6005 — override with `GODOT_LSP_PORT`
 - **File extension**: `.gd` → `gdscript` language
 
 ## Troubleshooting
@@ -83,13 +82,15 @@ nc -z localhost 6005 && echo "Connected" || echo "Failed"
 3. Check that the `.gd` file you're working with is part of an open Godot project
 4. Try manually testing the connection with the commands above
 
-### Custom port configuration
+### Custom host/port configuration
 
-If Godot LSP is running on a different port, you can set:
+If Godot LSP is running on a different port (or host), you can set:
 
 ```bash
-GODOT_LSP_PORT=6006 ENABLE_LSP_TOOL=true npx @anthropic-ai/claude-code
+GODOT_LSP_PORT=6006 ENABLE_LSP_TOOL=true claude
 ```
+
+`GODOT_LSP_HOST` is also available (default: `localhost`).
 
 ## License
 

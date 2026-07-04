@@ -38,6 +38,14 @@ ${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file.gd
 ${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file1.gd path/to/file2.gd
 ```
 
+### Directory (Recursive)
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/dir
+```
+
+Formats all GDScript files under the directory recursively.
+
 ### Safe Mode
 
 ```bash
@@ -81,9 +89,26 @@ ${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh --disable unused-ar
 
 ## Lint Rules
 
-Available rules include:
-- **Naming**: `function-name`, `class-name`, `variable-name`, `signal-name`
-- **Quality**: `unused-argument`, `max-line-length`, `no-else-return`, `private-access`
+- **Naming**: `function-name`, `class-name`, `variable-name`, `signal-name`, `constant-name`, `enum-name`, `enum-member-name`, `function-argument-name`, `loop-variable-name`
+- **Quality**: `unused-argument`, `max-line-length`, `no-else-return`, `private-access`, `duplicated-load`, `unnecessary-pass`, `standalone-expression`, `comparison-with-itself`
+
+Run `lint.sh --list-rules` for the authoritative list.
+
+### Suppressing Lint Warnings in Code
+
+Use `gdlint-ignore` comments (rule names comma-separated; omit them to ignore all rules):
+
+```gdscript
+# gdlint-ignore-next-line private-access
+obj._private_method()
+
+obj._private_method() # gdlint-ignore private-access
+```
+
+## Known Caveats
+
+- The formatter may expand single-line lambdas onto multiple lines. gdUnit4 `test_parameters` requires single-line lambdas — after formatting test suites, verify parameterized tests still parse (see the gdunit4-test-writer skill).
+- The formatter is under active development. If output looks wrong, re-run with `--safe` (refuses semantic changes) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
 
 ## Exit Codes
 

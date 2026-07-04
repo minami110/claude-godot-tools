@@ -21,26 +21,25 @@ claude plugin install gdunit4-toolkit@claude-godot-tools
 
 ## Plugins
 
-### gdscript-toolkit (v1.4.0)
+### gdscript-toolkit
 
 GDScript utilities for file management, validation, formatting, and API research.
 
-**Skills:** `gdscript-file-manager`, `gdscript-format`, `godot-doc-search`
+**Skills:** `gdscript-file-manager`, `gdscript-format`, `godot-doc-search`, `godot-cache-refresh`, `open-godot-editor`
 **Agents:** `godot-doc-search`
 
 ### gdscript-lsp (dev)
 
 GDScript language server for Godot Engine.
 
-### vscode-gdscript-tools (v1.0.0)
+### vscode-gdscript-tools
 
 VSCode-dependent GDScript development tools requiring IDE MCP integration.
 
 **Skills:** `gdscript-diagnostics`
 
-### gdunit4-toolkit (v1.5.1)
+### gdunit4-toolkit
 
 [gdUnit4](https://github.com/godot-gdunit-labs/gdUnit4) testing framework integration for Godot.
 
 **Skills:** `gdunit4-test-runner`, `gdunit4-test-writer`
-**Agents:** `gdunit4-test-runner`

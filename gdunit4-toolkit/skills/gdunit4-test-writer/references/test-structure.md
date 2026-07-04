@@ -114,22 +114,40 @@ func test_async_operation() -> void:
     assert_int(result).is_equal(42)
 ```
 
+## Test Timeout
+
+Override the default test timeout with the special `timeout` parameter (milliseconds):
+
+```gdscript
+func test_slow_operation(timeout := 10000) -> void:
+    await some_long_running_thing()
+```
+
 ## Skipping Tests
+
+gdUnit4 recognizes the special parameters `do_skip` and `skip_reason`. A leading underscore is allowed (and recommended — it avoids unused-parameter warnings without `@warning_ignore`).
 
 ### Skip a Single Test
 
 ```gdscript
-@warning_ignore('unused_parameter')
-func test_skip_this(do_skip=true) -> void:
-    # This test will be skipped
+func test_skip_this(_do_skip := true, _skip_reason := "not implemented yet") -> void:
     pass
 ```
 
 ### Skip Entire Suite
 
 ```gdscript
-@warning_ignore('unused_parameter')
-func before(do_skip=true):
+func before(_do_skip := true, _skip_reason := "suite disabled") -> void:
     # All tests in this suite will be skipped
+    pass
+```
+
+### Conditional Skip
+
+The `do_skip` default expression is evaluated **at test discovery time on a fresh suite instance** — it can call static helpers or environment checks, but must not depend on fixture state set up in `before()`/`before_test()`:
+
+```gdscript
+func before(_do_skip := DisplayServer.get_name() == "headless",
+        _skip_reason := "requires a display") -> void:
     pass
 ```

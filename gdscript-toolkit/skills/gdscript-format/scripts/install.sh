@@ -20,7 +20,8 @@ OPTIONS:
 
 DESCRIPTION:
   Downloads and installs gdscript-formatter binary for your platform.
-  Supported platforms: Linux x86_64, Windows x86_64 (via Git Bash/MSYS2)
+  Supported platforms: Linux (x86_64/aarch64), macOS (x86_64/aarch64),
+  Windows (x86_64/aarch64, via Git Bash/MSYS2)
 
   Binary is installed to: <skill>/bin/gdscript-formatter
 
@@ -48,20 +49,40 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# Architecture detection
+case "$(uname -m)" in
+  x86_64|amd64)
+    ARCH="x86_64"
+    ;;
+  aarch64|arm64)
+    ARCH="aarch64"
+    ;;
+  *)
+    echo "Error: Unsupported architecture: $(uname -m)"
+    echo ""
+    echo "Supported architectures: x86_64, aarch64/arm64"
+    exit 1
+    ;;
+esac
+
 # Platform detection
 case "$(uname -s)" in
   Linux*)
-    PLATFORM="linux-x86_64"
+    PLATFORM="linux-${ARCH}"
+    EXT=""
+    ;;
+  Darwin*)
+    PLATFORM="macos-${ARCH}"
     EXT=""
     ;;
   MINGW*|MSYS*|CYGWIN*)
-    PLATFORM="windows-x86_64"
+    PLATFORM="windows-${ARCH}"
     EXT=".exe"
     ;;
   *)
     echo "Error: Unsupported platform: $(uname -s)"
     echo ""
-    echo "Supported platforms: Linux, Windows (via Git Bash/MSYS2)"
+    echo "Supported platforms: Linux, macOS, Windows (via Git Bash/MSYS2)"
     exit 1
     ;;
 esac
@@ -76,10 +97,10 @@ echo ""
 mkdir -p "$BIN_DIR"
 cd "$BIN_DIR"
 
-# Download
+# Download (--fail: treat HTTP errors like 404 as failures instead of saving the error page)
 echo "Downloading from: $URL"
-if ! curl -sL "$URL" -o formatter.zip; then
-  echo "Error: Failed to download formatter"
+if ! curl -sfL "$URL" -o formatter.zip; then
+  echo "Error: Failed to download formatter from $URL"
   exit 1
 fi
 

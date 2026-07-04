@@ -12,7 +12,7 @@
       "name": "gdscript-toolkit",
       "source": "./gdscript-toolkit",
       "description": "GDScript utilities for file management, validation, formatting, and API research",
-      "version": "1.6.1",
+      "version": "1.7.0",
       "license": "MIT",
       "category": "development",
       "strict": false,
@@ -20,7 +20,8 @@
         "./skills/gdscript-file-manager",
         "./skills/gdscript-format",
         "./skills/godot-doc-search",
-        "./skills/godot-cache-refresh"
+        "./skills/godot-cache-refresh",
+        "./skills/open-godot-editor"
       ],
       "agents": [
         "./agents/godot-doc-search.md"
@@ -51,7 +52,7 @@
       "name": "gdunit4-toolkit",
       "source": "./gdunit4-toolkit",
       "description": "gdUnit4 testing framework integration for Godot",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "license": "MIT",
       "category": "development",
       "strict": false,

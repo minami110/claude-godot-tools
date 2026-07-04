@@ -77,9 +77,10 @@ echo ""
 mkdir -p "$BIN_DIR"
 
 # Download directly to bin directory
+# (--fail: treat HTTP errors like 404 as failures instead of saving the error page)
 echo "Downloading from: $URL"
-if ! curl -sL "$URL" -o "$BIN_DIR/$OUTPUT_NAME"; then
-  echo "Error: Failed to download gdunit4-test-runner"
+if ! curl -sfL "$URL" -o "$BIN_DIR/$OUTPUT_NAME"; then
+  echo "Error: Failed to download gdunit4-test-runner from $URL"
   exit 1
 fi
 

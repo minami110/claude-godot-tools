@@ -40,7 +40,7 @@ func test_example() -> void:
 - **String**: `assert_str(text).contains("hello")`
 - **Array**: `assert_array(items).has_size(5)`
 - **Object**: `assert_object(node).is_not_null()`
-- **Signal**: `await assert_signal(emitter).is_emitted("signal_name")`
+- **Signal**: `await assert_signal(emitter).is_emitted(emitter.my_signal)` (Signal reference preferred; string name also accepted)
 
 ### Memory Management
 
@@ -50,12 +50,23 @@ func test_with_node() -> void:
     assert_object(node).is_not_null()
 ```
 
+## Version Compatibility
+
+| gdUnit4 | Godot |
+|---------|-------|
+| v6.x | 4.5+ |
+| v5.x | 4.3 – 4.4.1 |
+| v4.4.0+ | 4.2+ |
+
+These references target gdUnit4 v6. Pre-v6 array-style arguments (e.g. `contains([1, 2])`, `is_emitted("sig", [args])`) are still accepted for backward compatibility, but prefer the v6 variadic style shown here.
+
 ## References
 
-- [references/assertions.md](assertions.md) - Complete assertion reference
-- [references/test-structure.md](test-structure.md)- Test lifecycle and structure
-- [references/signals.md](signals.md) - Signal testing guide
-- [references/scene-runner.md](scene-runner.md) - Scene runner for integration tests
+- [references/assertions.md](references/assertions.md) - Complete assertion reference
+- [references/test-structure.md](references/test-structure.md) - Test lifecycle and structure
+- [references/signals.md](references/signals.md) - Signal testing guide
+- [references/scene-runner.md](references/scene-runner.md) - Scene runner for integration tests
+- [references/parameterized-tests.md](references/parameterized-tests.md) - Parameterized tests and fuzzing
 
 ## Context7 Library ID
 
