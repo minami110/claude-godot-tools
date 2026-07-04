@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "A collection of Claude plugins for Godot Engine development.",
-    "version": "1.0.1"
+    "version": "1.1.0"
   },
   "plugins": [
     {
