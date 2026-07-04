@@ -11,7 +11,7 @@ BIN_DIR="$SCRIPT_DIR/../bin"
 # Function to display help message
 show_help() {
   cat << 'EOF'
-Usage: ./format.sh [OPTIONS] FILE...
+Usage: ./format.sh [OPTIONS] PATH...
 
 OPTIONS:
   --safe           Verify formatting doesn't change code semantics
@@ -20,11 +20,13 @@ OPTIONS:
   -h, --help       Show this help message
 
 ARGUMENTS:
-  FILE...          GDScript file(s) to format
+  PATH...          GDScript file(s) or directories to format
+                   (directories are formatted recursively)
 
 EXAMPLES:
   ./format.sh player.gd                    # Format single file
   ./format.sh src/*.gd                     # Format multiple files
+  ./format.sh src/                         # Format directory recursively
   ./format.sh --safe player.gd             # Format with safety check
   ./format.sh --check player.gd            # Check if formatting needed
 

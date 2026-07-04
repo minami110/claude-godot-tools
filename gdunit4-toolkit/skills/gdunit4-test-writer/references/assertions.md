@@ -2,6 +2,8 @@
 
 Always prefer type-specific assertions over `assert_that()` for better error messages.
 
+Since gdUnit4 v6, element arguments are variadic — write `contains(1, 2)` instead of the pre-v6 `contains([1, 2])` (the old array form is still accepted for backward compatibility).
+
 ## Assertion Reference
 
 | Assertion | Type | Key Methods |
@@ -13,8 +15,9 @@ Always prefer type-specific assertions over `assert_that()` for better error mes
 | `assert_array()` | Array | `has_size`, `contains`, `contains_exactly`, `is_empty`, `not_contains` |
 | `assert_dict()` | Dictionary | `is_empty`, `has_size`, `contains_keys`, `contains_key_value` |
 | `assert_object()` | Object | `is_null`, `is_not_null`, `is_same`, `is_instanceof` |
-| `assert_vector()` | Vector2/3 | `is_equal`, `is_equal_approx`, `is_less`, `is_greater` |
+| `assert_vector()` | Vector2/3/4 (incl. `i` variants) | `is_equal`, `is_equal_approx`, `is_less`, `is_greater` |
 | `assert_signal()` | Signal | `is_emitted`, `is_not_emitted`, `is_signal_exists` |
+| `assert_error()` | Callable | `is_success`, `is_push_warning`, `is_push_error`, `is_runtime_error` |
 | `assert_file()` | File | `exists`, `does_not_exist`, `is_script` |
 | `assert_that()` | Generic | Use when type is unknown |
 
@@ -74,11 +77,11 @@ assert_bool(flag).is_false()
 assert_array(items).has_size(5)
 assert_array(items).is_empty()
 assert_array(items).is_not_empty()
-assert_array(items).contains([1, 2])           # Contains these elements (any order)
-assert_array(items).contains_exactly([1, 2, 3]) # Exact match (same order)
-assert_array(items).contains_exactly_in_any_order([3, 1, 2])
-assert_array(items).not_contains([4, 5])
-assert_array(items).contains_same([obj1, obj2]) # Reference comparison
+assert_array(items).contains(1, 2)             # Contains these elements (any order)
+assert_array(items).contains_exactly(1, 2, 3)  # Exact match (same order)
+assert_array(items).contains_exactly_in_any_order(3, 1, 2)
+assert_array(items).not_contains(4, 5)
+assert_array(items).contains_same(obj1, obj2)  # Reference comparison
 ```
 
 ### Dictionary Assertions
@@ -87,7 +90,7 @@ assert_array(items).contains_same([obj1, obj2]) # Reference comparison
 assert_dict(data).is_empty()
 assert_dict(data).is_not_empty()
 assert_dict(data).has_size(3)
-assert_dict(data).contains_keys(["name", "age"])
+assert_dict(data).contains_keys("name", "age")
 assert_dict(data).contains_key_value("name", "Player")
 ```
 
@@ -112,6 +115,20 @@ assert_vector(pos).is_not_equal(Vector2.ZERO)
 assert_vector(pos).is_equal_approx(Vector2.ONE, Vector2(0.01, 0.01))
 assert_vector(pos).is_less(Vector2(100, 100))
 assert_vector(pos).is_greater(Vector2.ZERO)
+```
+
+### Error Assertions (Godot Runtime Errors)
+
+Verify that a callable pushes (or does not push) Godot warnings/errors. Matched pushes are consumed — production code that pushes warnings in its normal flow must be asserted explicitly, or unrelated tests may go red:
+
+```gdscript
+await assert_error(func(): my_object.do_risky_thing()) \
+    .is_push_warning("expected warning message")
+await assert_error(func(): my_object.do_risky_thing()) \
+    .is_push_error("expected error message")
+await assert_error(func(): my_object.crash()) \
+    .is_runtime_error("Division by zero")
+await assert_error(func(): my_object.do_safe_thing()).is_success()
 ```
 
 ### File Assertions

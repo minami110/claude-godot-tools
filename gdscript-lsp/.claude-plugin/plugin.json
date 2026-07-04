@@ -1,7 +1,10 @@
 {
   "name": "gdscript-lsp",
-  "version": "0.0.0.dev",
+  "version": "1.0.0",
   "description": "GDScript language server for Godot Engine",
+  "author": {
+    "name": "Minami Tomonobu"
+  },
   "license": "MIT",
   "lspServers": {
     "gdscript": {

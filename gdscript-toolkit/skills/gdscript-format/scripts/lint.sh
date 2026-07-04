@@ -25,9 +25,13 @@ ARGUMENTS:
 
 AVAILABLE RULES:
   Naming:  function-name, class-name, variable-name, signal-name,
-           constant-name, enum-name, enum-member-name
+           constant-name, enum-name, enum-member-name,
+           function-argument-name, loop-variable-name
   Quality: unused-argument, max-line-length, no-else-return,
-           private-access, duplicated-load, unnecessary-pass
+           private-access, duplicated-load, unnecessary-pass,
+           standalone-expression, comparison-with-itself
+
+  Run with --list-rules for the authoritative list.
 
 EXAMPLES:
   ./lint.sh player.gd                              # Lint single file

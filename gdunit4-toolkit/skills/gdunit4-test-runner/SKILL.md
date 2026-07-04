@@ -6,6 +6,13 @@ description: |
   USE PROACTIVELY to check test results.
 allowed-tools:
   - Bash
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/ensure-binary.sh"
+          once: true
 ---
 
 # GDScript Test
@@ -28,13 +35,11 @@ Run GDUnit4 tests using the gdunit4-test-runner binary.
 
 ## Setup
 
-Before running tests, ensure the binary is installed:
+The binary is installed automatically on first use (via a skill hook). To install manually:
 
-1. Check if `bin/gdunit4-test-runner` exists in the skill directory
-2. If not, run the install script:
-   ```bash
-   ${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/install.sh
-   ```
+```bash
+${CLAUDE_PLUGIN_ROOT}/skills/gdunit4-test-runner/scripts/install.sh
+```
 
 ## Test Execution
 

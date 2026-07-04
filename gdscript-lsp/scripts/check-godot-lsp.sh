@@ -1,12 +1,13 @@
 #!/bin/bash
 set -euo pipefail
 PORT="${GODOT_LSP_PORT:-6005}"
+HOST="${GODOT_LSP_HOST:-localhost}"
 
-if nc -z localhost "$PORT" 2>/dev/null; then
-    echo "✓ Godot LSP server is running on port $PORT"
+if nc -z "$HOST" "$PORT" 2>/dev/null; then
+    echo "✓ Godot LSP server is running on $HOST:$PORT"
     echo "  LSP features are available for .gd files"
 else
-    echo "⚠ Godot LSP server not detected on port $PORT"
+    echo "⚠ Godot LSP server not detected on $HOST:$PORT"
     echo ""
     echo "To enable LSP features:"
     echo "  1. Start Godot Editor with your project"
