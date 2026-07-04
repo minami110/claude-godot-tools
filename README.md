@@ -28,7 +28,7 @@ GDScript utilities for file management, validation, formatting, and API research
 **Skills:** `gdscript-file-manager`, `gdscript-format`, `godot-doc-search`, `godot-cache-refresh`, `open-godot-editor`
 **Agents:** `godot-doc-search`
 
-### gdscript-lsp (dev)
+### gdscript-lsp
 
 GDScript language server for Godot Engine.
 

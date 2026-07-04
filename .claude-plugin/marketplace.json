@@ -31,7 +31,7 @@
       "name": "gdscript-lsp",
       "source": "./gdscript-lsp",
       "description": "GDScript language server for Godot Engine",
-      "version": "0.0.0.dev",
+      "version": "1.0.0",
       "license": "MIT",
       "category": "development",
       "strict": true
