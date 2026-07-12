@@ -14,7 +14,15 @@ hooks:
 
 # GDScript Format
 
-Format and lint GDScript files using the gdscript-formatter tool from GDQuest.
+Format and lint GDScript files using the [gdscript-formatter](https://github.com/GDQuest/GDScript-formatter) binary from GDQuest.
+
+The binary is auto-installed by the PreToolUse hook on first use and lives at:
+
+```
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/bin/gdscript-formatter
+```
+
+Call it directly — no wrapper script. Run `--help` / `lint --help` to see all options.
 
 ## When to Use
 
@@ -24,75 +32,50 @@ Format and lint GDScript files using the gdscript-formatter tool from GDQuest.
 
 ## Format
 
-Format GDScript files using the format script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh`).
-
-### Single File
-
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file.gd
+# Single file
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/bin/gdscript-formatter path/to/file.gd
+
+# Multiple files
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/bin/gdscript-formatter path/to/file1.gd path/to/file2.gd
+
+# Directory (recursive)
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/bin/gdscript-formatter path/to/dir
 ```
 
-### Multiple Files
+Common flags:
 
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/file1.gd path/to/file2.gd
-```
-
-### Directory (Recursive)
-
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh path/to/dir
-```
-
-Formats all GDScript files under the directory recursively.
-
-### Safe Mode
-
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --safe path/to/file.gd
-```
-
-Verifies that formatting doesn't change code semantics.
-
-### Check Mode (CI)
-
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --check path/to/file.gd
-```
-
-Returns exit code 1 if changes are needed (useful for CI/CD).
-
-### Reorder Code
-
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/format.sh --reorder-code path/to/file.gd
-```
-
-Reorders code according to GDScript style guide.
+| Flag | Purpose |
+|---|---|
+| `-s`, `--safe` | Abort if formatting would change code meaning |
+| `-c`, `--check` | Exit 1 if files are not formatted (CI mode, no writes) |
+| `--stdout` | Write to stdout instead of overwriting files |
+| `--reorder-code` | Reorder code to match the official style guide |
+| `--max-line-length <N>` | Line length limit (default: 100) |
+| `--use-spaces` / `--indent-size <N>` | Use spaces for indentation |
+| `--blank-lines-around-definitions <N>` | Blank lines between top-level definitions (default: 2) |
 
 ## Lint
 
-Check code style using the lint script included in this skill (`${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh`).
-
-### Single File
-
 ```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh path/to/file.gd
+${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/bin/gdscript-formatter lint path/to/file.gd
 ```
 
-### With Options
+Common flags:
 
-```bash
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh --max-line-length 120 path/to/file.gd
-${CLAUDE_PLUGIN_ROOT}/skills/gdscript-format/scripts/lint.sh --disable unused-argument,private-access path/to/file.gd
-```
+| Flag | Purpose |
+|---|---|
+| `--disable <rules>` | Comma-separated rule names to skip |
+| `--max-line-length <N>` | Line length limit (default: 100) |
+| `--pretty` | Human-readable output |
+| `--list-rules` | Print every available rule and exit |
 
-## Lint Rules
+### Lint Rules
 
-- **Naming**: `function-name`, `class-name`, `variable-name`, `signal-name`, `constant-name`, `enum-name`, `enum-member-name`, `function-argument-name`, `loop-variable-name`
-- **Quality**: `unused-argument`, `max-line-length`, `no-else-return`, `private-access`, `duplicated-load`, `unnecessary-pass`, `standalone-expression`, `comparison-with-itself`
+- **Naming**: `function-name`, `class-name`, `signal-name`, `variable-name`, `function-argument-name`, `loop-variable-name`, `enum-name`, `enum-member-name`, `constant-name`
+- **Quality**: `duplicated-load`, `standalone-expression`, `unnecessary-pass`, `unused-argument`, `comparison-with-itself`, `private-access`, `max-line-length`, `no-else-return`
 
-Run `lint.sh --list-rules` for the authoritative list.
+Run `... lint --list-rules` for the authoritative list.
 
 ### Suppressing Lint Warnings in Code
 
@@ -112,6 +95,6 @@ obj._private_method() # gdlint-ignore private-access
 
 ## Exit Codes
 
-- **0**: Success (no issues or formatting applied)
-- **1**: Issues found or changes needed
-- **2**: Error (binary not found, invalid file, etc.)
+- **0**: Success (no issues, or formatting applied)
+- **1**: Issues found or changes needed (`--check` mode)
+- **2**: Binary not found or other setup error
