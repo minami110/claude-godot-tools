@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "A collection of Claude plugins for Godot Engine development.",
-    "version": "1.1.2"
+    "version": "1.1.3"
   },
   "plugins": [
     {
       "name": "gdscript-toolkit",
       "source": "./gdscript-toolkit",
       "description": "GDScript utilities for file management, validation, formatting, and API research",
-      "version": "1.8.1",
+      "version": "1.8.2",
       "license": "MIT",
       "category": "development",
       "strict": false,

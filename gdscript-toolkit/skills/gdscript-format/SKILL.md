@@ -47,10 +47,10 @@ Common flags:
 
 | Flag | Purpose |
 |---|---|
-| `-s`, `--safe` | Abort if formatting would change code meaning |
+| `-s`, `--safe` | Abort if formatting would change code meaning. Diagnostics currently report only `formatted output is structurally different from input`; the specific cause is not surfaced. |
 | `-c`, `--check` | Exit 1 if files are not formatted (CI mode, no writes) |
 | `--stdout` | Write to stdout instead of overwriting files |
-| `--reorder-code` | Reorder code to match the official style guide |
+| `--reorder-code` | Reorder code to match the official style guide. Includes formatting — a single call runs format and reorder. |
 | `--max-line-length <N>` | Line length limit (default: 100) |
 | `--use-spaces` / `--indent-size <N>` | Use spaces for indentation |
 | `--blank-lines-around-definitions <N>` | Blank lines between top-level definitions (default: 2) |
@@ -91,6 +91,7 @@ obj._private_method() # gdlint-ignore private-access
 ## Known Caveats
 
 - The formatter may expand single-line lambdas onto multiple lines. gdUnit4 `test_parameters` requires single-line lambdas — after formatting test suites, verify parameterized tests still parse (see the gdunit4-test-writer skill).
+- Formatter may crash on `.gd` files with dense multibyte content (e.g. long non-ASCII comments) with `index out of bounds: the len is 256 but the index is 65535`. Skip such files and re-run without them.
 - The formatter is under active development. If output looks wrong, re-run with `--safe` (refuses semantic changes) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
 
 ## Exit Codes
