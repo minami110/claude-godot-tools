@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "A collection of Claude plugins for Godot Engine development.",
-    "version": "1.1.1"
+    "version": "1.1.2"
   },
   "plugins": [
     {
       "name": "gdscript-toolkit",
       "source": "./gdscript-toolkit",
       "description": "GDScript utilities for file management, validation, formatting, and API research",
-      "version": "1.8.0",
+      "version": "1.8.1",
       "license": "MIT",
       "category": "development",
       "strict": false,
@@ -52,7 +52,7 @@
       "name": "gdunit4-toolkit",
       "source": "./gdunit4-toolkit",
       "description": "gdUnit4 testing framework integration for Godot",
-      "version": "2.3.0",
+      "version": "2.3.1",
       "license": "MIT",
       "category": "development",
       "strict": false,
