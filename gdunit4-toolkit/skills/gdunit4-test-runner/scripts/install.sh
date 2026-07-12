@@ -89,6 +89,9 @@ if [ -z "$EXT" ]; then
   chmod +x "$BIN_DIR/$OUTPUT_NAME"
 fi
 
+# Record installed version so ensure-binary.sh can detect drift after a marketplace update.
+printf '%s\n' "$VERSION" > "$BIN_DIR/.installed-version"
+
 echo ""
 echo "================================================="
 echo "gdunit4-test-runner v${VERSION} installed successfully!"

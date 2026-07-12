@@ -120,6 +120,9 @@ if [ -z "$EXT" ]; then
   chmod +x "gdscript-formatter"
 fi
 
+# Record installed version so ensure-binary.sh can detect drift after a marketplace update.
+printf '%s\n' "$VERSION" > "$BIN_DIR/.installed-version"
+
 echo ""
 echo "================================================="
 echo "gdscript-formatter v${VERSION} installed successfully!"
