@@ -51,9 +51,11 @@ Common flags:
 | `-c`, `--check` | Exit 1 if files are not formatted (CI mode, no writes) |
 | `--stdout` | Write to stdout instead of overwriting files |
 | `--reorder-code` | Reorder code to match the official style guide. Includes formatting — a single call runs format and reorder. |
-| `--max-line-length <N>` | Line length limit (default: 100) |
+| `--max-line-length <N>` | Line length limit (default: 100; `.editorconfig` can override — see below) |
 | `--use-spaces` / `--indent-size <N>` | Use spaces for indentation |
 | `--blank-lines-around-definitions <N>` | Blank lines between top-level definitions (default: 2) |
+
+The formatter honors `.editorconfig`, resolved upward from each formatted file's directory: settings such as `max_line_length` override the built-in defaults, and explicit CLI flags override `.editorconfig`. The `lint` subcommand does not read `.editorconfig`.
 
 ## Lint
 
@@ -66,7 +68,7 @@ Common flags:
 | Flag | Purpose |
 |---|---|
 | `--disable <rules>` | Comma-separated rule names to skip |
-| `--max-line-length <N>` | Line length limit (default: 100) |
+| `--max-line-length <N>` | Line length limit (default: 100; lint ignores `.editorconfig`) |
 | `--pretty` | Human-readable output |
 | `--list-rules` | Print every available rule and exit |
 
@@ -90,7 +92,9 @@ obj._private_method() # gdlint-ignore private-access
 
 ## Known Caveats
 
-- The formatter may expand single-line lambdas onto multiple lines. gdUnit4 `test_parameters` requires single-line lambdas — after formatting test suites, verify parameterized tests still parse (see the gdunit4-test-writer skill).
+- Formatting (no flags needed) expands a single-line lambda into block form when the lambda itself cannot fit within the line limit; lambdas that fit stay single-line (surrounding containers are wrapped first). The result is valid GDScript, so `--check` and `--safe` will not flag it — but a block-form lambda inside gdUnit4 `test_parameters` breaks test discovery. Keep such lambdas within the line limit or extract a named static helper (see the gdunit4-test-writer skill).
+- `--reorder-code` detaches a declaration's trailing same-line comment onto its own line, where it reads as the next declaration's comment. Write comments on their own line above the declaration instead.
+- `--reorder-code` moves a mid-file `@warning_ignore_start` together with the declaration that follows it, changing which declarations it covers. For file-wide suppression, place it at the very top of the file, above `class_name` (between `class_name` and `extends` it is a parse error). For warnings inside a function body, use a statement-level `@warning_ignore` in the body — annotating the `func` declaration does not cover its body.
 - The formatter is under active development. If output looks wrong, re-run with `--safe` (refuses semantic changes) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
 
 ## Exit Codes
