@@ -91,7 +91,6 @@ obj._private_method() # gdlint-ignore private-access
 ## Known Caveats
 
 - The formatter may expand single-line lambdas onto multiple lines. gdUnit4 `test_parameters` requires single-line lambdas — after formatting test suites, verify parameterized tests still parse (see the gdunit4-test-writer skill).
-- Formatter may crash on `.gd` files with dense multibyte content (e.g. long non-ASCII comments) with `index out of bounds: the len is 256 but the index is 65535`. Skip such files and re-run without them.
 - The formatter is under active development. If output looks wrong, re-run with `--safe` (refuses semantic changes) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
 
 ## Exit Codes
