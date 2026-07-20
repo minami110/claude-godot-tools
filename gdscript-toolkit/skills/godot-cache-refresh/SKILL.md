@@ -47,3 +47,7 @@ Godot prints WARNING and ERROR messages to stderr during headless runs. These ar
 - `ERROR: Condition "..." is true`
 
 Only the exit code matters.
+
+## Role Separation vs godot-resource-resave
+
+This skill is a **passive scan**: it never rewrites project files, only regenerates caches and missing `.gd.uid` sidecars. To inject `uid=` into `.tscn` / `.tres` files themselves (and validate that they load), use **godot-resource-resave**, which actively rewrites those files. When new `.gd` files are referenced by new scenes, run this skill first so the UID cache is populated, then godot-resource-resave.
