@@ -44,7 +44,8 @@ func _initialize() -> void:
 	quit(1 if _fail_count > 0 else 0)
 
 
-# Normalizes `arg` and appends matching resource files to `out`.
+# Normalizes `arg` and appends matching resource files to `out`,
+# skipping files already collected via an earlier argument.
 # Returns false if the path does not exist.
 func _collect(arg: String, out: Array[String]) -> bool:
 	var path := _normalize(arg)
@@ -52,7 +53,7 @@ func _collect(arg: String, out: Array[String]) -> bool:
 		_collect_dir(path, out)
 		return true
 	if FileAccess.file_exists(path):
-		if _is_target(path):
+		if _is_target(path) and not out.has(path):
 			out.append(path)
 		return true
 	return false
@@ -64,16 +65,18 @@ func _collect_dir(dir_path: String, out: Array[String]) -> void:
 			_collect_dir(dir_path.path_join(name), out)
 	for name in DirAccess.get_files_at(dir_path):
 		var path := dir_path.path_join(name)
-		if _is_target(path):
+		if _is_target(path) and not out.has(path):
 			out.append(path)
 
 
 func _normalize(arg: String) -> String:
-	if arg.begins_with("res://"):
-		return arg
-	if arg.is_absolute_path():
-		return ProjectSettings.localize_path(arg)
-	return "res://" + arg
+	var path := arg
+	if not path.begins_with("res://"):
+		if path.is_absolute_path():
+			path = ProjectSettings.localize_path(path)
+		else:
+			path = "res://" + path
+	return path.simplify_path()
 
 
 func _is_target(path: String) -> bool:
