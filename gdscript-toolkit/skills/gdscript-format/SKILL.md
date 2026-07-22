@@ -55,7 +55,7 @@ Common flags:
 | `--use-spaces` / `--indent-size <N>` | Use spaces for indentation |
 | `--blank-lines-around-definitions <N>` | Blank lines between top-level definitions (default: 2) |
 
-The formatter honors `.editorconfig`, resolved upward from each formatted file's directory: settings such as `max_line_length` override the built-in defaults, and explicit CLI flags override `.editorconfig`. The `lint` subcommand does not read `.editorconfig`.
+The formatter honors `.editorconfig`, resolved upward from each formatted file's directory: settings such as `max_line_length` override the built-in defaults, and explicit CLI flags override `.editorconfig`. Since formatter 0.22.2 the `lint` subcommand also honors `.editorconfig`'s `max_line_length` (earlier versions ignored it); an explicit `--max-line-length` still overrides it.
 
 ## Lint
 
@@ -68,7 +68,7 @@ Common flags:
 | Flag | Purpose |
 |---|---|
 | `--disable <rules>` | Comma-separated rule names to skip |
-| `--max-line-length <N>` | Line length limit (default: 100; lint ignores `.editorconfig`) |
+| `--max-line-length <N>` | Line length limit (default: 100; since formatter 0.22.2 lint honors `.editorconfig`'s `max_line_length`, and this flag overrides it) |
 | `--pretty` | Human-readable output |
 | `--list-rules` | Print every available rule and exit |
 
