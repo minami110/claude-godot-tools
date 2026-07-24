@@ -47,7 +47,7 @@ Common flags:
 
 | Flag | Purpose |
 |---|---|
-| `-s`, `--safe` | Abort if formatting would change code meaning. Diagnostics currently report only `formatted output is structurally different from input`; the specific cause is not surfaced. |
+| `--verify-structure` | Abort and keep the original file if formatting would change the code's structure. Diagnostics report only `Verify structure: formatted output is structurally different from input`; the specific cause is not surfaced. Since formatter 0.23.0 this replaces `-s`/`--safe`, which still works as a deprecated alias but no longer appears in `--help`. |
 | `-c`, `--check` | Exit 1 if files are not formatted (CI mode, no writes) |
 | `--stdout` | Write to stdout instead of overwriting files |
 | `--reorder-code` | Reorder code to match the official style guide. Includes formatting — a single call runs format and reorder. |
@@ -92,9 +92,9 @@ obj._private_method() # gdlint-ignore private-access
 
 ## Known Caveats
 
-- Formatting (no flags needed) expands **every** single-line lambda into block form — since formatter 0.22.0 a line break always follows the lambda declaration, regardless of line length (previously only overlong lambdas were expanded). The result is valid GDScript, so `--check` and `--safe` will not flag it — but a block-form lambda inside gdUnit4 `test_parameters` breaks test discovery, and keeping the lambda short no longer prevents the expansion. Extract a named static helper instead of inline lambdas there (see the gdunit4-test-writer skill), or exclude such test files from formatting.
+- Formatting (no flags needed) expands **every** single-line lambda into block form — since formatter 0.22.0 a line break always follows the lambda declaration, regardless of line length (previously only overlong lambdas were expanded). The result is valid GDScript, so `--check` and `--verify-structure` will not flag it — but a block-form lambda inside gdUnit4 `test_parameters` breaks test discovery, and keeping the lambda short no longer prevents the expansion. Extract a named static helper instead of inline lambdas there (see the gdunit4-test-writer skill), or exclude such test files from formatting.
 - `--reorder-code` moves a mid-file `@warning_ignore_start` together with the declaration that follows it, changing which declarations it covers. For file-wide suppression, place it at the very top of the file, above `class_name` (between `class_name` and `extends` it is a parse error). For warnings inside a function body, use a statement-level `@warning_ignore` in the body — annotating the `func` declaration does not cover its body.
-- The formatter is under active development. If output looks wrong, re-run with `--safe` (refuses semantic changes) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
+- The formatter is under active development. If output looks wrong, re-run with `--verify-structure` (aborts and keeps the original file if the output's structure differs) and report the snippet upstream to [GDQuest/GDScript-formatter](https://github.com/GDQuest/GDScript-formatter/issues).
 
 ## Exit Codes
 
