@@ -25,7 +25,7 @@ claude plugin install gdunit4-toolkit@claude-godot-tools
 
 GDScript utilities for file management, validation, formatting, and API research.
 
-**Skills:** `gdscript-file-manager`, `gdscript-format`, `godot-doc-search`, `godot-cache-refresh`, `godot-resource-resave`, `open-godot-editor`
+**Skills:** `gdscript-file-manager`, `gdscript-format`, `godot-doc-search`, `godot-cache-refresh`, `godot-resource-resave`, `godot-resource-owners`, `open-godot-editor`
 **Agents:** `godot-doc-search`
 
 ### gdscript-lsp

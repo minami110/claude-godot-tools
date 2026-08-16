@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "A collection of Claude plugins for Godot Engine development.",
-    "version": "1.1.9"
+    "version": "1.1.10"
   },
   "plugins": [
     {
       "name": "gdscript-toolkit",
       "source": "./gdscript-toolkit",
       "description": "GDScript utilities for file management, validation, formatting, and API research",
-      "version": "1.12.0",
+      "version": "1.13.0",
       "license": "MIT",
       "category": "development",
       "strict": false,
@@ -22,6 +22,7 @@
         "./skills/godot-doc-search",
         "./skills/godot-cache-refresh",
         "./skills/godot-resource-resave",
+        "./skills/godot-resource-owners",
         "./skills/open-godot-editor"
       ],
       "agents": [

@@ -13,6 +13,17 @@ Manage GDScript files (.gd) along with their corresponding .uid files.
 
 Godot Engine auto-generates a `.uid` file for each resource. **Always handle .gd and .uid files together.**
 
+## Before Any Operation: Check Owners
+
+Run **godot-resource-owners** on the target first:
+
+```bash
+${CLAUDE_PLUGIN_ROOT}/skills/godot-resource-owners/scripts/owners.sh <project_root> <file>.gd
+```
+
+- **Delete**: if any owner is listed, stop — remove or redirect those references first, then delete.
+- **Move / Rename**: owners tagged `(uid)` or `(path+uid)` survive the move (Godot re-resolves them by UID). Owners tagged `(path)` — `preload("res://old/path.gd")` literals, `project.godot` autoloads, etc. — will break; update those literals to the new path right after the move.
+
 ## Operations
 
 ### Move Files
@@ -26,6 +37,8 @@ mv <source>.gd <destination>.gd && mv <source>.gd.uid <destination>.gd.uid
 
 # 3. Verify
 ls <destination-dir> && ls <source-dir>
+
+# 4. Update every owner tagged (path) to the new res:// path
 ```
 
 ### Rename Files
@@ -36,12 +49,14 @@ mv <old-name>.gd <new-name>.gd && mv <old-name>.gd.uid <new-name>.gd.uid
 
 # 2. Verify
 ls -la <directory>
+
+# 3. Update every owner tagged (path) to the new res:// path
 ```
 
 ### Delete Files
 
 ```bash
-# 1. Verify target
+# 1. Verify target and confirm it has no owners (see above)
 ls -la <directory>
 
 # 2. Delete both files
@@ -56,5 +71,6 @@ ls -la <directory>
 - Never manually create or edit .uid files - Godot manages them automatically
 - Always process both files together to avoid breaking project references
 - Verify files before operations using `ls` commands
+- `.uid` references survive a move; `res://` path literals in other scripts and in `project.godot` do not — always run the owners check first
 
 See @examples.md for detailed examples and troubleshooting.
