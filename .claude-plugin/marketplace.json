@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "A collection of Claude plugins for Godot Engine development.",
-    "version": "1.1.10"
+    "version": "1.1.11"
   },
   "plugins": [
     {
@@ -54,7 +54,7 @@
       "name": "gdunit4-toolkit",
       "source": "./gdunit4-toolkit",
       "description": "gdUnit4 testing framework integration for Godot",
-      "version": "2.3.2",
+      "version": "2.3.3",
       "license": "MIT",
       "category": "development",
       "strict": false,

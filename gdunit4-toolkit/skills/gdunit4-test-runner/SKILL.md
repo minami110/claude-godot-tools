@@ -137,12 +137,19 @@ The binary outputs test results in JSON format for easy parsing.
     "crashed": true,
     "status": "crashed"
   },
-  "crash_details": null,
+  "crash_details": {
+    "crash_info": "...",
+    "script_errors": "..."
+  },
   "failures": []
 }
 ```
 
-Godot crashed during test execution. Only tests completed before crash are reported.
+`crashed` means Godot crashed (`handle_crash:`) or no test report was produced (e.g. a test script failed to compile). Only tests completed before the crash are reported.
+
+### Script Errors
+
+`SCRIPT ERROR:` lines alone do NOT mark a run as crashed. When a complete report exists, they appear in `crash_details.script_errors` as diagnostics while `status` stays `passed` or `failed`. Mention them in the report if present.
 
 ## Exit Codes
 
